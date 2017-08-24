@@ -1,0 +1,95 @@
+doctype html
+html
+    head
+        title Pagar ahora!
+        // Vendor libraries
+        link(rel='stylesheet', href='http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css')
+        // Latest compiled and minified CSS
+        link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css', integrity='sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u', crossorigin='anonymous')
+        link(rel='stylesheet', href='css/payment_form.css')
+    body
+        .container
+            .row
+                .col-xs-12.col-md-4
+                    // CREDIT CARD FORM STARTS HERE
+                    .panel.panel-default.credit-card-box
+                        .panel-heading.display-table
+                            .row.display-tr
+                                h3.panel-title.display-td Detalles de Pago
+                                .display-td
+                                    img.img-responsive.pull-right(src='img/accepted_cards.png')
+                        .panel-body
+                            form#payment-form(role='form', method='POST', action='javascript:void(0);')
+                                .row
+                                    .paymentWrap
+                                        .btn-group.paymentBtnGroup(data-toggle='buttons')
+                                            label.btn.paymentMethod
+                                                .method.visa
+                                                input#Visa(type='radio', name='card_type', value='Visa', checked='')
+                                            label.btn.paymentMethod.active
+                                                .method.master-card
+                                                input#MasterCard(type='radio', name='card_type', value='MasterCard')
+                                            label.btn.paymentMethod
+                                                .method.amex
+                                                input#AmEx(type='radio', name='card_type', value='AmEx')
+                                            label.btn.paymentMethod
+                                                .method.oxxo-cash
+                                                input#Oxxo(type='radio', name='card_type', value='Oxxo')
+                                .row
+                                    .col-xs-12
+                                        .form-group
+                                            label(for='card_number') NUMERO DE TARJETA
+                                            .input-group
+                                                input.form-control(type='tel', name='card_number', placeholder='Numero de tarjeta', autocomplete='cc-number', required='', autofocus='')
+                                                span.input-group-addon
+                                                    i.fa.fa-credit-card
+                                .row
+                                    .col-xs-12
+                                        .form-group
+                                            label(for='card_name') NOMBRE
+                                            input.form-control(type='text', name='card_name', required='')
+                                .row
+                                    .col-xs-12
+                                        .form-group
+                                            label(for='card_address') DIRECCION
+                                            input.form-control(type='text', name='card_address', required='')
+                                .row
+                                    .col-xs-7.col-md-7
+                                        .form-group
+                                            label(for='card_expiry')
+                                                span.hidden-xs EXPIRATION
+                                                span.visible-xs-inline EXP
+                                                |  DATE
+                                            input.form-control(type='tel', name='card_expiry', placeholder='MM / YY', autocomplete='cc-exp', required='')
+                                    .col-xs-5.col-md-5.pull-right
+                                        .form-group
+                                            label(for='card_cvc') CVC CODE
+                                            input.form-control(type='tel', name='card_cvc', placeholder='CVC', autocomplete='cc-csc', required='')
+                                .row
+                                    .col-xs-8
+                                        .form-group
+                                            label(for='amount') CANTIDAD
+                                            input.form-control(type='number', min='0.01', step='0.01' name='amount', required='')
+                                    .col-xs-4
+                                        .form-group
+                                            label(for='promo_msi') PROMO MSI
+                                            input.form-control(type='checkbox', name='promo_msi')
+                                .row
+                                    .col-xs-12
+                                        .form-group
+                                            label(for='description') DESCRIPCION
+                                            input.form-control(type='text', name='description', required='')
+                                .row
+                                    .col-xs-12
+                                        button.pagar.btn.btn-success.btn-lg.btn-block(type='button') Pagar
+                                .row(style='display:none;')
+                                    .col-xs-12
+                                        p.payment-errors
+                    // CREDIT CARD FORM ENDS HERE
+                // Latest compiled and minified JavaScript
+                script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+                script(type='text/javascript', src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js', integrity='sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa', crossorigin='anonymous')
+                script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js')
+                script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/jquery.payment/3.0.0/jquery.payment.min.js')
+                script(type='text/javascript', src='js/creditcard.js')
+                script(type='text/javascript', src='js/payment_form.js')
