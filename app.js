@@ -10,6 +10,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var operations = require('./routes/operations');
 var db = require('./misc/db');
+var Charge = require('./models/Charge');
 
 var app = express();
 
@@ -29,7 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 var redis_client = redis.createClient();
 
 redis_client.on('connect', function(){
-  console.log('connected');
+  console.log('Connected to Redis...');
 });
 
 app.use('/', index);
@@ -38,6 +39,12 @@ app.use('/operations',operations);
 
 app.get('/pay', function(req, res, next){
   res.render('pay');
+});
+
+app.get('/payments', function(req,res,next){
+    Charge.find({}, function(err, charges){
+        res.render('payments',{ payments : charges });
+    });
 });
 
 app.get('/receipt', function(req, res, next){

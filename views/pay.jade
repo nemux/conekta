@@ -66,7 +66,7 @@ html
                                             label(for='card_cvc') CVC CODE
                                             input.form-control(type='tel', name='card_cvc', placeholder='CVC', autocomplete='cc-csc', required='')
                                 .row
-                                    .col-xs-8
+                                    .col-xs-4
                                         .form-group
                                             label(for='amount') CANTIDAD
                                             input.form-control(type='number', min='0.01', step='0.01' name='amount', required='')
@@ -74,6 +74,10 @@ html
                                         .form-group
                                             label(for='promo_msi') PROMO MSI
                                             input.form-control(type='checkbox', name='promo_msi')
+                                    .col-xs-4
+                                        .form-group
+                                            label(for='pre_auth') PRE_AUTH
+                                            input.form-control(type='checkbox', name='pre_auth')
                                 .row
                                     .col-xs-12
                                         .form-group

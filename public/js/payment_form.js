@@ -8,6 +8,8 @@ function pagarConMiniconekta(e){
         return;
     }
 
+    var preautorizar = $('input[name=pre_auth]').is(':checked');
+
     $form.find('.pagar').html('Validando... <i class="fa fa-spinner fa-pulse"></i>').prop('disabled', true);
 
     var expiry =$.payment.cardExpiryVal($('input[name=card_expiry]').val());
@@ -31,31 +33,61 @@ function pagarConMiniconekta(e){
 
     request_token.done(function(response, textStatus, jqXHR){
 
-        request_charge = $.ajax({
-            type: "POST",
-            dataType: 'json',
-            url: '/operations/charge',
-            data: {
-                token: response.token,
-                amount: $('input[name=amount]').val(),
-                promo_msi : $('input[name=promo_msi]').is(':checked'),
-                company : 'Playeras Conekta',
-                currency : 'MXN',
-                description :$('input[name=description]').val()
-            }
-        });
+        if (preautorizar){
+            request_pre_auth = $.ajax({
+                type: "POST",
+                dataType: 'json',
+                url: '/operations/pre_auth',
+                data: {
+                    token: response.token,
+                    amount: $('input[name=amount]').val(),
+                    promo_msi: $('input[name=promo_msi]').is(':checked'),
+                    company: 'Playeras Conekta',
+                    currency: 'MXN',
+                    description: $('input[name=description]').val(),
+                }
+            });
 
-        request_charge.done(function(response, textStatus, jqXHR){
-            $form.find('.pagar').html('Pagado <i class="fa fa-pulse"></i>').prop('disabled', true);
-            alert('Pago realizado correctamente.');
-            location.reload();
-        });
+            request_pre_auth.done(function (response, textStatus, jqXHR) {
+                $form.find('.pagar').html('Preautorizado <i class="fa fa-pulse"></i>').prop('disabled', true);
+                alert('Su Preautorización con ' + response.card_type + ' ha sido ' + response.gateway_result + ' por ' + response.gateway + ' ID: ' + response.id);
+                location.reload();
+            });
 
-        request_charge.fail(function(response, textStatus, jqXHR){
-            $form.find('.pagar').html('Pagado <i class="fa fa-pulse"></i>').prop('disabled', true);
-            alert('Error al realizar pago.');
-            location.reload();
-        });
+            request_pre_auth.fail(function (response, textStatus, jqXHR) {
+                $form.find('.pagar').html('Preautorizado <i class="fa fa-pulse"></i>').prop('disabled', true);
+                alert('Error al realizar preautorización.');
+                location.reload();
+            });
+
+        } else {
+
+            request_charge = $.ajax({
+                type: "POST",
+                dataType: 'json',
+                url: '/operations/charge',
+                data: {
+                    token: response.token,
+                    amount: $('input[name=amount]').val(),
+                    promo_msi: $('input[name=promo_msi]').is(':checked'),
+                    company: 'Playeras Conekta',
+                    currency: 'MXN',
+                    description: $('input[name=description]').val()
+                }
+            });
+
+            request_charge.done(function (response, textStatus, jqXHR) {
+                $form.find('.pagar').html('Pagado <i class="fa fa-pulse"></i>').prop('disabled', true);
+                alert('Su pago con ' + response.card_type + ' ha sido ' + response.gateway_result + ' por ' + response.gateway);
+                location.reload();
+            });
+
+            request_charge.fail(function (response, textStatus, jqXHR) {
+                $form.find('.pagar').html('Pagado <i class="fa fa-pulse"></i>').prop('disabled', true);
+                alert('Error al realizar pago.');
+                location.reload();
+            });
+        }
     });
 
     request_token.fail(function(jqXHR, textstatus, errorThrown){

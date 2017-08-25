@@ -1,6 +1,7 @@
 var base64 = require('base-64');
 var utf8 = require('utf8');
 var sha1 = require('sha1');
+var Charge = require('../models/Charge');
 
 exports.cipher = function (text){
     var bytes = utf8.encode(text);
@@ -31,10 +32,20 @@ exports.get_last4 = function(string){
 };
 
 exports.STATUS = {
-    PENDING_PAYMENT: 'Pendiente de Pago',
-    PRE_AUTH:'Pre Autorizado',
-    PAID: 'Pagado',
-    REFOUNDED: 'Refounded',
-    VOID: 'Liberado'
+    PENDING_PAYMENT: 'PENDING_PAYMENT',
+    PRE_AUTH:'PRE_AUTH',
+    PAID: 'PAID',
+    REFOUNDED: 'REFOUNDED',
+    VOID: 'VOID',
+    REJECTED: 'REJECTED'
 };
+
+exports.GATEWAYS = {
+  BANCOMER: 'http://162.243.1.43:3001',
+  SANTANDER: 'http://162.243.1.43:3002'
+};
+
+exports.BANCOMER_BINS = ['425907','425914','426354','426376','510840','510875'];
+exports.SANTANDER_BINS = ['433948','433950','433991','434254','510982','511000'];
+exports.BANCOMER_BINS_MSI = ['426451','426488','426501','510197','510241'];
 

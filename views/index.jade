@@ -3,3 +3,9 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+  p Available pages:
+    li
+      a(href="/pay", target="_blank") To make a pay.
+    li
+      a(href="/payments", target="_blank") To check payments history.
+
