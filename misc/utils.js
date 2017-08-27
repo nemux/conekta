@@ -34,7 +34,7 @@ exports.get_last4 = function(string){
 exports.STATUS = {
     PENDING_PAYMENT: 'PENDING_PAYMENT',
     PRE_AUTH:'PRE_AUTH',
-    PAID: 'PAID',
+    APPROVED: 'APPROVED',
     REFOUNDED: 'REFOUNDED',
     VOID: 'VOID',
     REJECTED: 'REJECTED'

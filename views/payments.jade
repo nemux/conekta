@@ -1,7 +1,7 @@
 doctype html
 html(lang='en')
     head
-        title Jade
+        title Payments History
         // Vendor libraries
         link(rel='stylesheet', href='http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css')
         // Latest compiled and minified CSS
@@ -24,25 +24,33 @@ html(lang='en')
                                 span.clickable.filter(data-toggle='tooltip', title='Toggle table filter', data-container='body')
                                     i.glyphicon.glyphicon-filter
                         .panel-body
-                            input#dev-table-filter.form-control(type='text', data-action='filter', data-filters='#dev-table', placeholder='Filter Developers')
+                            input#dev-table-filter.form-control(type='text', data-action='filter', data-filters='#dev-table', placeholder='Filter Payments')
                         table#dev-table.table.table-hover
                             thead
                                 tr
-                                    th Id
                                     th Token
                                     th Amount
                                     th Description
                                     th Last 4 digits
                                     th STATUS
+                                    th ACTION
                             tbody
                             each payment in payments
                                 tr
-                                    td #{payment._id}
                                     td #{payment.token}
                                     td #{payment.amount}
                                     td #{payment.description}
                                     td #{payment.card_last4}
                                     td #{payment.status}
+                                    if payment.status == 'APPROVED'
+                                        td
+                                            a(class="btn btn-info" href="/operations/refund?id=#{payment._id}") REFUND
+                                    else if payment.status == 'PRE_AUTH'
+                                        td
+                                            a(class="btn btn-info" href="/operations/void?id=#{payment._id}" ) VOID
+                                    else
+                                        td
+                                            a(class="btn btn-warning" href="#" ) NONE
 
         script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js')
         script(type='text/javascript', src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js', integrity='sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa', crossorigin='anonymous')

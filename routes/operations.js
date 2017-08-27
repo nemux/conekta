@@ -144,7 +144,7 @@ router.post('/charge', function(req,res,next){
                     rest_client.post(pasarela+'/pay', {}, function (data, response) {
 
                         //Update after gateway response.
-                        var change_status = data.result == 'accepted' ? STATUS.PAID : STATUS.REJECTED;
+                        var change_status = data.result == 'accepted' ? STATUS.APPROVED : STATUS.REJECTED;
 
                         Charge.findOneAndUpdate({id : id },{status : change_status}, {new: true}, function(err, doc2) {
                             doc2.gateway = data.bank;
@@ -188,7 +188,7 @@ router.post('/charge', function(req,res,next){
                     rest_client.post(pasarela+'/pay', {}, function (data, response) {
 
                         //Update after gateway response.
-                        var change_status = data.result == 'accepted' ? STATUS.PAID : STATUS.REJECTED;
+                        var change_status = data.result == 'accepted' ? STATUS.APPROVED : STATUS.REJECTED;
 
                         Charge.findOneAndUpdate({_id : charge_saved.id },{status : change_status}, {new: true}, function(err, doc2) {
 
@@ -203,6 +203,49 @@ router.post('/charge', function(req,res,next){
                 });
             }
         });
+    });
+});
+
+router.get('/refund', function(req, res){
+    var charge_id =req.query.id;
+
+    Charge.findOne({_id:charge_id}, function (err, doc) {
+        if(err)
+            res.json({error: err});
+
+        console.log(charge_id);
+        if (doc.status == STATUS.APPROVED) {
+
+            doc.status = STATUS.REFOUNDED;
+
+            doc.save(function(err, saved, total){
+                if(err)
+                    res.json({error: err});
+                res.redirect('/payments');
+            });
+
+        }
+    });
+});
+
+router.get('/void', function(req, res){
+    var charge_id =req.query.id;
+
+    Charge.findOne({_id:charge_id}, function (err, doc) {
+        if(err)
+            res.json({error: err});
+
+        if (doc.status == STATUS.PRE_AUTH) {
+
+            doc.status = STATUS.VOID;
+
+            doc.save(function(err, saved, total){
+                if(err)
+                    res.json({error: err});
+                res.redirect('/payments');
+            });
+
+        }
     });
 });
 
