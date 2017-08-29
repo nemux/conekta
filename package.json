@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "NODE_ENV=test mocha test/**/*.js"
   },
   "dependencies": {
     "body-parser": "~1.17.1",
@@ -18,6 +19,11 @@
     "sha1": "1.1.1",
     "redis": "2.8.0",
     "mongoose": "4.11.8",
-    "node-rest-client":"3.1.0"
+    "node-rest-client": "3.1.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.1",
+    "mocha": "^3.5.0",
+    "supertest": "^3.0.0"
   }
 }
