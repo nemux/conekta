@@ -51,8 +51,6 @@ router.post('/pre_auth', function(req,res,next){
     var currency = req.body.currency;
     var description = req.body.description;
     var promo_msi = req.body.promo_msi;
-    var company = req.body.company;
-    var currency = req.body.currency;
     var date = new Date();
 
     //Check if token exist
@@ -81,15 +79,12 @@ router.post('/pre_auth', function(req,res,next){
             if(err)
                 res.json({error: err});
 
-            console.log(charge_saved);
-
             //SELECT GATEWAY ACCORDING TO BIN
             var pasarela = Math.floor(Math.random() * 2) == 0 ? GATEWAY.BANCOMER : GATEWAY.SANTANDER;
 
             //Pay to gateway
             var rest_client = new Client();
             rest_client.post(pasarela+'/pre_auth', {}, function (data, response) {
-                console.log(data);
 
                 var change_status = data.result == 'accepted' ? STATUS.PRE_AUTH : STATUS.REJECTED;
 
@@ -109,8 +104,6 @@ router.post('/charge', function(req,res,next){
     var currency = req.body.currency;
     var description = req.body.description;
     var promo_msi = req.body.promo_msi;
-    var company = req.body.company;
-    var currency = req.body.currency;
     var id = req.body.id;
     var date = new Date();
 
@@ -119,16 +112,13 @@ router.post('/charge', function(req,res,next){
         if(err){
             res.json({error:err, message: 'Invalid token.'});
         }
-        console.log('ID->' + id);
         //Check if preauth charge
         Charge.findOne({_id : id }, function(err, doc) {
-            console.log(doc);
 
             //SELECT RANDOM GATEWAY
             var pasarela = Math.floor(Math.random() * 2) == 0 ? GATEWAY.BANCOMER : GATEWAY.SANTANDER;
 
             if(doc) {
-                console.log('IF');
                 if(doc.status == STATUS.PRE_AUTH){
                     //Proceed to pay
 
@@ -195,7 +185,6 @@ router.post('/charge', function(req,res,next){
                             charge_info.status = doc2.status;
                             charge_info.gateway = data.bank;
                             charge_info.gateway_result = data.result;
-                            console.log(charge_info);
                             res.json(charge_info);
                         });
                     });
@@ -213,7 +202,6 @@ router.get('/refund', function(req, res){
         if(err)
             res.json({error: err});
 
-        console.log(charge_id);
         if (doc.status == STATUS.APPROVED) {
 
             doc.status = STATUS.REFOUNDED;
